@@ -1,6 +1,10 @@
 const router = require('express').Router();
 const htmlRoutes = require('./html/html-routes');
+//import all of the API routes from /api/index.js and index.js is implied below
+const apiRoutes = require('./api');
 
+//add prefix of '/api' to all of the api routes imported from the api directory
+router.use('/api', apiRoutes);
 router.use('/', htmlRoutes);
 
 router.use((req, res) => {
