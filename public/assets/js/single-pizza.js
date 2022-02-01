@@ -9,6 +9,29 @@ const $newCommentForm = document.querySelector('#new-comment-form');
 
 let pizzaId;
 
+function getPizza() {
+  //get id of pizza
+  const searchParams = new URLSearchParams(document.location.search.substring(1));
+  const pizzaId = searchParams.get('id');
+
+  //get pizzaInfo
+  fetch(`/api/pizzas/${pizzaId}`)
+    .then(response => {
+      console.log(response);
+      //look for 400 or 500 error from server
+      if (!response.ok) {
+        throw new Error({message: 'Something went wrong'});
+      }
+      return response.json();
+    })
+    .then(printPizza)
+    .catch(err => {
+      console.log(err);
+      alert('Cannot find a pizza with this ID! Taking you back...');
+      window.history.back();
+    });
+}
+
 function printPizza(pizzaData) {
   console.log(pizzaData);
 
@@ -87,6 +110,29 @@ function handleNewCommentSubmit(event) {
   }
 
   const formData = { commentBody, writtenBy };
+
+  fetch(`/api/comments/${pizzaId}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    //send commentBody and writtenBy to comments/<pizzaId> route
+    body: JSON.stringify(formData)
+  }).then(response => {
+    console.log(response);
+    if (!response.ok) {
+      throw new Error('Something went wrong');
+    }
+    //format server response into json
+    response.json();
+  }).then(commentResponse => {
+    console.log(commentResponse);
+    //refresh page and then comment should appear automatically through getPizza() function on page load
+    location.reload();
+  }).catch(err => {
+    console.log(err);
+  });
 }
 
 function handleNewReplySubmit(event) {
@@ -114,3 +160,5 @@ $backBtn.addEventListener('click', function() {
 
 $newCommentForm.addEventListener('submit', handleNewCommentSubmit);
 $commentSection.addEventListener('submit', handleNewReplySubmit);
+
+getPizza();
