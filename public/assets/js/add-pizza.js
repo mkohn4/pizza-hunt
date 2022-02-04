@@ -1,4 +1,3 @@
-const { json } = require("express/lib/response");
 
 const $addToppingBtn = document.querySelector('#add-topping');
 const $pizzaForm = document.querySelector('#pizza-form');

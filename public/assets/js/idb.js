@@ -83,3 +83,5 @@ function uploadPizza() {
 
 //listen for app coming back online
 window.addEventListener('online', uploadPizza);
+
+//how do we access the indexedDB functions without requiring them? because it loads the script files from the html and everything "connects"?
