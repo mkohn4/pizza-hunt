@@ -3,10 +3,14 @@ const dateFormat = require('../utils/dateFormat');
 
 const PizzaSchema = new Schema({
     pizzaName: {
-        type: String
+        type: String,
+        required: true,
+        trim: true
     },
     createdBy: {
-        type: String
+        type: String,
+        required: true,
+        trim: true
     },
     createdAt: {
         type: Date,
@@ -15,6 +19,8 @@ const PizzaSchema = new Schema({
     },
     size: {
         type: String,
+        required: true,
+        enum: ['Personal', 'Small', 'Medium', 'Large', 'Extra Large'],
         default: 'Large'
     },
     toppings: [],
@@ -37,6 +43,7 @@ const PizzaSchema = new Schema({
 PizzaSchema.virtual('commentCount').get(function() {
     //return all comments
     //return this.comments.length;
+
     //return comments count and reply count to comments
     //use reduce method to tally up total of every comment with its replies
     //it takes the accumulator = total and currentValue = comment
